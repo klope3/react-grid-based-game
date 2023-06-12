@@ -1,5 +1,4 @@
 import { tileSizePx } from "./constants";
-import { world } from "./testworld";
 import { Vector2 } from "./types";
 
 function getViewRange(viewCenter: Vector2, viewSizePx: Vector2) {
@@ -19,16 +18,33 @@ function getViewRange(viewCenter: Vector2, viewSizePx: Vector2) {
   };
 }
 
-export function getVisibleTiles(viewCenter: Vector2, viewSizePx: Vector2) {
+export function getViewElements(
+  viewCenter: Vector2,
+  viewSizePx: Vector2,
+  worldArray: any[][]
+) {
   const viewRange = getViewRange(viewCenter, viewSizePx);
   const minX = viewRange.topLeftCorner.x;
   const maxX = viewRange.bottomRightCorner.x;
   const minY = viewRange.topLeftCorner.y;
   const maxY = viewRange.bottomRightCorner.y;
+  const worldMaxX = worldArray[0].length - 1;
+  const worldMaxY = worldArray.length - 1;
 
-  const rows = world.slice(minY, maxY + 1);
-  const visible = rows.map((row) => row.slice(minX, maxX + 1));
-  return visible;
+  const tiles: any[][] = Array.from({ length: maxY - minY + 1 }, () => []);
+  for (let y = minY; y <= maxY; y++) {
+    for (let x = minX; x <= maxX; x++) {
+      if (x < 0 || x > worldMaxX || y < 0 || y > worldMaxY) {
+        tiles[y - minY][x - minX] = -1;
+      } else {
+        tiles[y - minY][x - minX] = worldArray[y][x];
+      }
+    }
+  }
+  //old method
+  // const rows = worldArray.slice(minY, maxY + 1);
+  // const tiles = rows.map((row) => row.slice(minX, maxX + 1));
+  return tiles;
 }
 
 export function getObjectViewOffset(

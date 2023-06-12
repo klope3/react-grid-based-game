@@ -1,3 +1,3 @@
 export const tileSizePx = 32,
-  viewWidthPx = 160,
-  viewHeightPx = 160;
+  viewWidthPx = tileSizePx * 15,
+  viewHeightPx = tileSizePx * 11;

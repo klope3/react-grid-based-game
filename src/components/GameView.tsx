@@ -1,8 +1,9 @@
 import { tileSizePx, viewHeightPx, viewWidthPx } from "../constants";
-import { getObjectViewOffset, getVisibleTiles } from "../gridLogic";
+import { getObjectViewOffset, getViewElements } from "../gridLogic";
 import { Vector2 } from "../types";
 import { useState } from "react";
 import "./GameView.css";
+import { world } from "../testworld";
 
 export function GameView() {
   const [viewX, setViewX] = useState(12);
@@ -15,7 +16,7 @@ export function GameView() {
     x: viewWidthPx,
     y: viewHeightPx,
   };
-  const visibleTiles = getVisibleTiles(viewCoords, viewSizePx);
+  const visibleTiles = getViewElements(viewCoords, viewSizePx, world);
   return (
     <>
       <div
