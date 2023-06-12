@@ -1,9 +1,10 @@
-import { tileSizePx, viewHeightPx, viewWidthPx } from "../constants";
-import { getObjectViewOffset, getViewElements } from "../gridLogic";
-import { Vector2 } from "../types";
+import { viewHeightPx, viewWidthPx } from "../../constants";
+import { getObjectViewOffset, getViewElements } from "../../gridLogic";
+import { Vector2 } from "../../types";
 import { useState } from "react";
 import "./GameView.css";
-import { world } from "../testworld";
+import { world } from "../../testworld";
+import { GameTile } from "../GameTile/GameTile";
 
 export function GameView() {
   const [viewX, setViewX] = useState(12);
@@ -16,37 +17,25 @@ export function GameView() {
     x: viewWidthPx,
     y: viewHeightPx,
   };
-  const visibleTiles = getViewElements(viewCoords, viewSizePx, world);
+  const viewTiles = getViewElements(viewCoords, viewSizePx, world);
   return (
     <>
       <div
         className="game-view"
         style={{ width: `${viewWidthPx}px`, height: `${viewHeightPx}px` }}
       >
-        {visibleTiles.map((row, y) =>
+        {viewTiles.map((row, y) =>
           row.map((tile, x) => {
             const tileWorldPos: Vector2 = {
-              x: Math.round(viewX) - Math.floor(visibleTiles[0].length / 2) + x,
-              y: Math.round(viewY) - Math.floor(visibleTiles.length / 2) + y,
+              x: Math.round(viewX) - Math.floor(viewTiles[0].length / 2) + x,
+              y: Math.round(viewY) - Math.floor(viewTiles.length / 2) + y,
             };
             const viewOffset = getObjectViewOffset(
               viewCoords,
               tileWorldPos,
               viewSizePx
             );
-            return (
-              <div
-                className="temp-tile"
-                style={{
-                  backgroundColor: tile ? "white" : "black",
-                  position: "absolute",
-                  width: `${tileSizePx}px`,
-                  height: `${tileSizePx}px`,
-                  left: `${viewOffset.x}px`,
-                  top: `${viewOffset.y}px`,
-                }}
-              ></div>
-            );
+            return <GameTile tile={tile} viewOffset={viewOffset} />;
           })
         )}
       </div>
