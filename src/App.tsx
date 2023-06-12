@@ -1,7 +1,12 @@
 import "./App.css";
+import { GameView } from "./components/GameView";
 
 function App() {
-  return <></>;
+  return (
+    <>
+      <GameView />
+    </>
+  );
 }
 
 export default App;
